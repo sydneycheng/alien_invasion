@@ -8,20 +8,42 @@ class Ship:
     def __init__(self,ai_game): #ai_game references the AlienInvasion class
 
         """Initialize the ship and set its starting position."""
-        self.screen = ai_game.screen    #screen is an attribute of Ship
+        self.screen = ai_game.screen
+        self.settings = ai_game.settings
         #allows us to place the ship in the correct location on the screen
         self.screen_rect = ai_game.screen.get_rect()   #rects = rectangles
 
         # Load the ship image and get its rect.
         self.image = pygame.image.load('images/ship.bmp')
-        self.rect = self.image.get_rect()   #allows us to access the ship surface's rect
-                                            #attribute so we can later use it to place
-                                            #the ship
-        #returns  a surface representing the ship, which we assign to self.image
+        self.rect = self.image.get_rect()
 
         #Start each new ship at the bottom center of the screen.
         self.rect.midbottom = self.screen_rect.midbottom
 
+        # Store a decimal value for the ship's horizontal position.
+        self.x = float(self.rect.x)
+
+        # Movement flags
+        self.moving_right = False   #means the ship is motionless
+        self.moving_left = False
+
+    #moves the ship right and left (updating the position of the ship) if the flag is True
+    def update(self):
+        """Update the ship's position based on the movement flags."""
+        #2 if blocks used rather than an elif - allows ship's rect.x value to be increased & decreased when
+        #both arrow keys ar held down: results in ship standing still
+
+        # Update the ship's x value, not the rect.
+        #limits the ship's range (prevents ship from disappearing of the edge of the screen)
+        if self.moving_right and self.rect.right < self.screen_rect.right:
+            self.x += self.settings.ship_speed
+        if self.moving_left and self.rect.left > 0:
+            self.x -= self.settings.ship_speed
+
+        # Update rect object from self.x.
+        self.rect.x = self.x    #controls the position of the ship
+
+    #draws the ship to the screen
     def blitme(self):
         """Draw the ship at its current location."""
         self.screen.blit(self.image, self.rect) #draws the image to the screen @ position specified by self.rect
@@ -30,9 +52,8 @@ class Ship:
         #use x- and y-coordinates of the top, bottom, left, and right edges of the rectangle,
             #as well as the center, to place the object. Use any of these values to est the current
             #position of the rect.'
-        #when centering a game eement, work w the center, centerx, or centery attributes of a rect
+        #when centering a game element, work w the center, centerx, or centery attributes of a rect
         #when working at the edge of the screen, work w the top, bottom, left, or right attributes.
         #can also combine these properties: midbottom, midtop, midleft, and midright
         #when adgjusting the horizontal or vertical placement, you can use the x and y attributes
 
-        #in Pygame, the origin (0,0) is at the top left corner

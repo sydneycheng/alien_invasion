@@ -40,9 +40,12 @@ class AlienInvasion:
         """Start the main loop for the game."""
         while True:
             self._check_events()
-            self.ship.update()  #calls the ship's update() method on each pass through the loop
-            self._update_bullets()
-            self._update_aliens()
+
+            if self.stats.game_active:
+                self.ship.update()  #calls the ship's update() method on each pass through the loop
+                self._update_bullets()
+                self._update_aliens()
+                
             self._update_screen()
         
     #detects relevant events (keypresses, keyreleases)    

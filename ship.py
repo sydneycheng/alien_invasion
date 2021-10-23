@@ -1,5 +1,3 @@
-                        #####CREATING A SHIP CLASS#####
-
 import pygame
 
 class Ship:
@@ -48,12 +46,7 @@ class Ship:
         """Draw the ship at its current location."""
         self.screen.blit(self.image, self.rect) #draws the image to the screen @ position specified by self.rect
 
-        #RECT OBJECTS
-        #use x- and y-coordinates of the top, bottom, left, and right edges of the rectangle,
-            #as well as the center, to place the object. Use any of these values to est the current
-            #position of the rect.'
-        #when centering a game element, work w the center, centerx, or centery attributes of a rect
-        #when working at the edge of the screen, work w the top, bottom, left, or right attributes.
-        #can also combine these properties: midbottom, midtop, midleft, and midright
-        #when adgjusting the horizontal or vertical placement, you can use the x and y attributes
-
+    def center_ship(self):
+        """Center the ship on the screen."""
+        self.rect.midbottom = self.screen_rect.midbottom
+        self.x = float(self.rect.x) #tracks ship's exact position

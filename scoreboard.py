@@ -3,7 +3,7 @@ import pygame.font
 class Scoreboard:
     """A class to report scoring information."""
 
-    def __init__(self, ai_game):    #ai_game parameter gives allows access to
+    def __init__(self, ai_game):    #ai_game parameter gives allows access to 
                                     #settings, screen, and stats objects
         """Initialize scorekeeping attributes."""
         self.screen = ai_game.screen

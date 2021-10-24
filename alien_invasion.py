@@ -84,6 +84,12 @@ class AlienInvasion:
             self.settings.initialize_dynamic_settings() #resets the speed
             self.stats.reset_stats()    #giving player 3 new ships
             self.stats.game_active = True
+            #preps the scoreboard w/ a 0 score when starting a new game
+            self.sb.prep_score()
+            #prep level to 0 at the start of each new game
+            self.sb.prep_level()
+            #preps ships on screen at start of each new game
+            self.sb.prep_ships()
 
             # Get rid of any remaining aliens and bullets.
             self.aliens.empty()
@@ -149,8 +155,13 @@ class AlienInvasion:
         
         #updates score each time an alien is shot down
         if collisions:
-            self.stats.score += self.settings.alien_points
+            #loops through all values in the collisions dictionary
+            #each value is a List of aliens hit by a single bullet
+                #we mult the value of each alien by the # of aliens in each list & add this to current score
+            for aliens in collisions.values():
+                self.stats.score += self.settings.alien_points * len(aliens)
             self.sb.prep_score()    #creates a new image for the updated score
+            self.sb.check_high_score()
 
         #check whether the aliens group is empty
         if not self.aliens:
@@ -158,6 +169,10 @@ class AlienInvasion:
             self.bullets.empty()    #Removes existing bullets
             self._create_fleet()    #Repopulates the alien fleet
             self.settings.increase_speed()
+
+            # Increase level if a fleet is destroyed.
+            self.stats.level += 1
+            self.sb.prep_level()
 
     def _update_aliens(self):
         """
@@ -225,8 +240,9 @@ class AlienInvasion:
     def _ship_hit(self):
         """Respond to the ship being hit by an alien."""
         if self.stats.ships_left > 0:
-            # Decrement ships_left.
+            # Decrement ships_left, and update scoreboard.
             self.stats.ships_left -= 1
+            self.sb.prep_ships()    #updates the display of ship images when player loses a ship
 
             # Get rid of any remaining aliens and bullets.
             self.aliens.empty()

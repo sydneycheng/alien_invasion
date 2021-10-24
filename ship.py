@@ -1,11 +1,14 @@
 import pygame
+from pygame.sprite import Sprite
 
-class Ship:
+class Ship(Sprite): #by maing Ship inherit from Sprite, so we can create a group of ships
     """A class to manage the ship."""
 
     def __init__(self,ai_game): #ai_game references the AlienInvasion class
 
         """Initialize the ship and set its starting position."""
+        super().__init__()
+
         self.screen = ai_game.screen
         self.settings = ai_game.settings
         #allows us to place the ship in the correct location on the screen
